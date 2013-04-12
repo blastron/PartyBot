@@ -1,0 +1,2 @@
+import playlist
+playlist.runTests()
