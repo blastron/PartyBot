@@ -97,6 +97,9 @@ class PartyBot(irc.IRCClient):
             elif command == "stop":
                 self.Broadcast('\x0305*!* Pausing party... *!*')
                 self.StopCompo()
+            elif command == "skip":
+                self.Broadcast('\x0305*!* Skipping track... *!*')
+                self.SkipTrack()
             elif command == "say":
                 if len(arguments) > 0:
                     self.Broadcast(' '.join(arguments))
@@ -248,6 +251,10 @@ class PartyBot(irc.IRCClient):
     
     def StopCompo(self):
         self.nextStep = None
+        if self.streamer.IsPlaying(): self.streamer.Stop()
+    
+    def SkipTrack(self):
+        self.nextStep = "advance"
         if self.streamer.IsPlaying(): self.streamer.Stop()
     
     def BroadcastStreamUrl(self):
