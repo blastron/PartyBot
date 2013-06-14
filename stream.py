@@ -1,7 +1,7 @@
-
+import os
 import shout
-import sys
 import string
+import sys
 import time
 
 import threading
@@ -22,7 +22,7 @@ class ShoutcastStreamer(threading.Thread):
         self._shoutcaster = shout.Shout()
         print "Initializing new shoutcast interface, using libshout version %s" % shout.version()
         
-        self._shoutcaster.password = 'crypsis'
+        self._shoutcaster.password = open(os.path.join(os.path.dirname(__file__), "password.txt"), "r").read()
         self._shoutcaster.mount = '/partybot'
         self._shoutcaster.format = 'mp3'
         
