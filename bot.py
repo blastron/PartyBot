@@ -3,7 +3,6 @@ from twisted.internet import reactor, protocol, task
 import stream
 import urllib2
 from compo import Compo
-
 from datetime import datetime
 
 
@@ -81,7 +80,7 @@ class PartyBot:
     def schedule(self, arguments, user, is_private):
         if len(arguments) == 3:
             self.scheduled_compo_id = arguments[0]
-            self.scheduled_compo_start = datetime.strptime("%s %s"%(arguments[1], arguments[2]), "%m/%d/%Y %H:%M")
+            self.scheduled_compo_start = datetime.strptime("%s %s" % (arguments[1], arguments[2]), "%m/%d/%Y %H:%M")
             self.irc_client.broadcast_response(user, "Party has been scheduled.", is_private)
 
     def start_scheduled_party(self):
@@ -109,14 +108,15 @@ class PartyBot:
         "schedule": "Schedules a party for the future. Usage: \x0306!schedule compo_id MM/DD/YYYY HH:MM\x0F. " +
                     "Time is in 24-hour UTC.",
         "stop": "Stops the current party.",
-        #"skip": "Starts a vote for the current song to be skipped.",
+        # "skip": "Starts a vote for the current song to be skipped.",
     }
 
     def display_help(self, arguments, user, is_private):
         if len(arguments) == 1 and arguments[0] in self.commands:
-            self.irc_client.broadcast_response("!%s - %s" % (arguments[0], self.commands[arguments[0]]))
+            self.irc_client.broadcast_response(user, "!%s - %s" % (arguments[0], self.commands[arguments[0]]),
+                                               is_private)
         else:
-            self.irc_client.broadcast_response(", ".join(self.commands.keys()))
+            self.irc_client.broadcast_response(user, ", ".join(self.commands.keys()), is_private)
 
     def broadcast_stream_url(self):
         self.irc_client.broadcast("*** Jukebox is online. Tune in at http://blastron.us.to:8000/partybot.m3u ***")
