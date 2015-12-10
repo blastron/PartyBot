@@ -115,6 +115,8 @@ class PartyBot:
     def display_help(self, arguments, user, is_private):
         if len(arguments) == 1 and arguments[0] in self.commands:
             self.irc_client.broadcast_response("!%s - %s" % (arguments[0], self.commands[arguments[0]]))
+        else:
+            self.irc_client.broadcast_response(", ".join(self.commands.keys()))
 
     def broadcast_stream_url(self):
         self.irc_client.broadcast("*** Jukebox is online. Tune in at http://blastron.us.to:8000/partybot.m3u ***")
