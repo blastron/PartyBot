@@ -1,6 +1,6 @@
 from twisted.internet import reactor
 import bot
 
-factory = bot.PartyBotFactory("#thasauce")
-reactor.connectTCP("irc.esper.net", 6667, factory)
+factory = bot.BotClientFactory("#thasaucetest")
+reactor.connectTCP("irc.esper.net", 6667, factory, 300)
 reactor.run()

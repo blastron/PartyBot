@@ -106,7 +106,7 @@ class ShoutcastStreamer(threading.Thread):
                 self._currentlyPlaying = False
                 self.playLock.release()
                 
-                print "Song complete, playing silence..."
+                print "Input stream complete, playing silence..."
             
             # Play silence to keep the station alive for this tick
             if not self._silenceStream: self._GetSilenceStream()
@@ -156,4 +156,4 @@ class ShoutcastStreamer(threading.Thread):
         if self._inputStream and not self._inputStream.closed: self._inputStream.close()
         self._inputStream = open(filepath)
         
-        print "Loading song stream from file %s..." % filepath
+        print "Loading input stream from file %s..." % filepath

@@ -5,16 +5,17 @@ import re
 from playlist import Track, Playlist
 base_url = 'http://compo.thasauce.net'
 
-def scrapePlaylist(compoId):
-    url = 'http://compo.thasauce.net/rounds/view/%s' % compoId
-    soup = BeautifulSoup(urllib2.urlopen(url).read())
-    
-    newPlaylist = Playlist()
-    for parsedTrack in [parseEntry(rawTrack) for rawTrack in soup.find_all('div', {'class': 'item'})]:
-        newPlaylist.AddTrack(parsedTrack)
-    return newPlaylist
 
-def parseEntry(entry):
+def parse_playlist(playlist_html):
+    soup = BeautifulSoup(playlist_html)
+
+    new_playlist = Playlist()
+    for parsedTrack in [parse_entry(rawTrack) for rawTrack in soup.find_all('div', {'class': 'item'})]:
+        new_playlist.AddTrack(parsedTrack)
+    return new_playlist
+
+
+def parse_entry(entry):
     # Scrape the title and artist from the item's head block
     item_head = entry.find('div', {'class': 'item_head'})
     song_title = item_head.contents[0].strip()
