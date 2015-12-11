@@ -1,9 +1,9 @@
 from twisted.words.protocols import irc
 from twisted.internet import reactor, protocol, task
 import stream
-import urllib2
 from compo import Compo
 from datetime import datetime
+import traceback
 
 
 class PartyBot:
@@ -58,7 +58,7 @@ class PartyBot:
             self.compo.update()
             if self.compo.state in (Compo.State.Complete, Compo.State.Error):
                 self.compo = None
-        elif self.scheduled_compo_start and self.scheduled_compo_start < datetime.utcnow:
+        elif self.scheduled_compo_start and self.scheduled_compo_start < datetime.utcnow():
             self.start_scheduled_party()
             self.scheduled_compo_id = None
             self.scheduled_compo_start = None
@@ -82,6 +82,8 @@ class PartyBot:
             self.scheduled_compo_id = arguments[0]
             self.scheduled_compo_start = datetime.strptime("%s %s" % (arguments[1], arguments[2]), "%m/%d/%Y %H:%M")
             self.irc_client.broadcast_response(user, "Party has been scheduled.", is_private)
+        else:
+            self.display_help(["schedule"], user, is_private)
 
     def start_scheduled_party(self):
         self.irc_client.broadcast("Starting scheduled party...")
@@ -178,7 +180,10 @@ class BotClient(irc.IRCClient):
 
     def handle_tick(self):
         if self.is_joined:
-            bot_instance.tick()
+            try:
+                bot_instance.tick()
+            except Exception:
+                traceback.print_exc()
 
     # IRC interactions
     def broadcast(self, text):
