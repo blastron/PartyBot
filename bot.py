@@ -200,9 +200,13 @@ class BotClient(irc.IRCClient):
             self.broadcast(recipient + ": " + text)
 
 
-class BotClientFactory(protocol.ClientFactory):
+class BotClientFactory(protocol.ReconnectingClientFactory):
     def __init__(self, channel):
         self.channel = channel
+        
+        self.maxDelay = 300
+        self.initialDelay = 5
+        self.factor = 2
 
     def buildProtocol(self, addr):
         p = BotClient()
@@ -211,8 +215,9 @@ class BotClientFactory(protocol.ClientFactory):
 
     def clientConnectionLost(self, connector, reason):
         """If we get disconnected, reconnect to server."""
-        connector.connect()
+        print "Connection to server lost: ", reason
+        ReconnectingClientFactory.clientConnectionLost(self, connector, reason)
 
     def clientConnectionFailed(self, connector, reason):
-        print "connection failed:", reason
-        reactor.stop()
+        print "Connection to server failed: ", reason
+        ReconnectingClientFactory.clientConnectionFailed(self, connector, reason)
