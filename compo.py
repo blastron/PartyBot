@@ -114,6 +114,7 @@ class Compo:
             else:
                 # The current song has not yet been seen. Kick off a download, interrupting any other downloads
                 #   currently in-progress.
+                self.state = Compo.State.WaitingForSongDownload
                 self.bot.irc_client.broadcast("Downloading track, please stand by...")
                 self._download_track(current_track)
 
