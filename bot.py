@@ -216,8 +216,8 @@ class BotClientFactory(protocol.ReconnectingClientFactory):
     def clientConnectionLost(self, connector, reason):
         """If we get disconnected, reconnect to server."""
         print "Connection to server lost: ", reason
-        ReconnectingClientFactory.clientConnectionLost(self, connector, reason)
+        protocol.ReconnectingClientFactory.clientConnectionLost(self, connector, reason)
 
     def clientConnectionFailed(self, connector, reason):
         print "Connection to server failed: ", reason
-        ReconnectingClientFactory.clientConnectionFailed(self, connector, reason)
+        protocol.ReconnectingClientFactory.clientConnectionFailed(self, connector, reason)
