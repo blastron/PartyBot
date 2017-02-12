@@ -68,7 +68,11 @@ class PartyBot:
             if not self.compo:
                 self.broadcast_stream_url()
                 compo_id = arguments[0]
-                start_index = int(arguments[1]) if len(arguments) == 2 else 0
+
+                start_index = 0
+                if len(arguments) == 2 and arguments[1].isdigit():
+                    start_index = int(arguments[1])
+
                 self.compo = Compo(compo_id, self, self.streamer)
                 self.compo.start(start_index)
             else:
