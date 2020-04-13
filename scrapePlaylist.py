@@ -16,19 +16,12 @@ def parse_playlist(playlist_html):
 
 
 def parse_entry(entry):
-    # Scrape the title and artist from the item's head block
-    item_head = entry.find('div', {'class': 'item_head'})
-    song_title = item_head.contents[0].strip()
-    song_artist = item_head.find('a').contents[0].strip()
-    
-    # Slap a regex (ugh) on the player JavaScript to grab the song URL
-    script_text = entry.find('script').contents[0]
-    song_url = re.search('s3\.addVariable\("file","(?P<url>.*)"\);', script_text).group('url')
-    
-    # Get the song's ID and URL from the item's download block
-    item_download = entry.find('div', {'class': 'item_download'})
-    song_id = item_download.p["id"][7:]
-    relative_url = item_download.find_all('a')[1]["href"]
+    # Grab some details from data attributes of item and it's children
+    song_id = entry.div["data-id"]
+    song_title = entry.div["data-title"]
+    song_artist = entry.div["data-author"]
+
+    relative_url = entry.a["data-file"]
     song_url = ''.join([base_url, relative_url])
     
     # Get the song's description from the description block
