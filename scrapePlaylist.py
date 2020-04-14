@@ -17,11 +17,12 @@ def parse_playlist(playlist_html):
 
 def parse_entry(entry):
     # Grab some details from data attributes of item and it's children
-    song_id = entry.div["data-id"]
-    song_title = entry.div["data-title"]
-    song_artist = entry.div["data-author"]
+    song_id = entry["data-id"]
+    song_title = entry["data-title"]
+    song_artist = entry["data-author"]
 
-    relative_url = entry.a["data-file"]
+    download_link = entry.find('a', {'class': 'song-download'})
+    relative_url = download_link["data-file"]
     song_url = ''.join([base_url, relative_url])
     
     # Get the song's description from the description block
